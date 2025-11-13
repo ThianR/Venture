@@ -1,0 +1,54 @@
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=201.222.48.18)(PORT=2521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=riosweb)))
+    username: ${DB_USER}
+    password: ${DB_PASS}
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      pool-name: venture-hikari
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      validation-timeout: 5000
+  jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.OracleDialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate.implicit_naming_strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+      hibernate.physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.format_sql: true
+  session:
+    store-type: redis
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    schemas: INV
+    default-schema: INV
+    locations: classpath:db/migration
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+vaadin:
+  launch-browser: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+
+logging:
+  level:
+    org.hibernate.SQL: INFO
+
