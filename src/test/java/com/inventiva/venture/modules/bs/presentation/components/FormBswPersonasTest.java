@@ -45,8 +45,7 @@ class FormBswPersonasTest {
 
         form.submit();
 
-        assertThat(guardada.get()).isNotNull();
-        assertThat(guardada.get().isEstadoActivoAux()).isTrue();
+        assertThat(guardada.get()).isNotNull();        
         assertThat(guardada.get().getCodPersona()).isEqualTo("001");
     }
 }

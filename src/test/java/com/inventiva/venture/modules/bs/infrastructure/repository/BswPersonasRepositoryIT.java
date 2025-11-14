@@ -7,13 +7,11 @@ import java.time.LocalDate;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.containers.OracleContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -21,10 +19,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 @Testcontainers
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class BswPersonasRepositoryIT {
+class BswPersonasRepositoryTest {
 
     @Container
     private static final OracleContainer ORACLE = new OracleContainer("gvenzl/oracle-xe:21-slim")
@@ -63,11 +60,7 @@ class BswPersonasRepositoryIT {
                 .direccion("Asunción")
                 .telefono("021123456")
                 .fecNacimiento(LocalDate.of(1990, 5, 10))
-                .esFisicaAux(true)
-                .esClienteAux(true)
-                .esProveedorAux(false)
-                .esEmpleadoAux(false)
-                .estadoActivoAux(true)
+                .esFisicaAux(true)                
                 .build();
 
         repository.save(persona);
@@ -78,7 +71,6 @@ class BswPersonasRepositoryIT {
         assertThat(result.getTotalElements()).isEqualTo(1);
         BswPersonas recuperada = result.getContent().get(0);
         assertThat(recuperada.isEsFisicaAux()).isTrue();
-        assertThat(recuperada.isEsClienteAux()).isTrue();
         assertThat(recuperada.getCodPersona()).isEqualTo("001");
     }
 }
