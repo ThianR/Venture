@@ -97,11 +97,7 @@ public class FormBswPersonas extends FormLayout {
                 .bind(BswPersonas::getTelefono, BswPersonas::setTelefono);
 
         binder.bind(fecNacimiento, BswPersonas::getFecNacimiento, BswPersonas::setFecNacimiento);
-        binder.bind(esFisicaAux, BswPersonas::isEsFisicaAux, BswPersonas::setEsFisicaAux);
-        binder.bind(esClienteAux, BswPersonas::isEsClienteAux, BswPersonas::setEsClienteAux);
-        binder.bind(esProveedorAux, BswPersonas::isEsProveedorAux, BswPersonas::setEsProveedorAux);
-        binder.bind(esEmpleadoAux, BswPersonas::isEsEmpleadoAux, BswPersonas::setEsEmpleadoAux);
-        binder.bind(estadoActivoAux, BswPersonas::isEstadoActivoAux, BswPersonas::setEstadoActivoAux);
+        binder.bind(esFisicaAux, BswPersonas::isEsFisicaAux, BswPersonas::setEsFisicaAux);        
     }
 
     private HorizontalLayout createButtonsLayout() {
@@ -209,7 +205,8 @@ public class FormBswPersonas extends FormLayout {
         }
     }
 
-    public <T extends PersonaFormEvent> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener) {
+    public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,
+            ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
     }
 }

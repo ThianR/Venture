@@ -19,8 +19,14 @@ public class BswPersonasService {
         return repository.findByCodPersonaContainingIgnoreCaseOrNombreContainingIgnoreCase(
                 criterio,
                 criterio,
-                pageable
-        );
+                pageable);
+    }
+
+    public long contar(String filtro) {
+        String criterio = filtro == null ? "" : filtro.trim();
+        return repository.countByCodPersonaContainingIgnoreCaseOrNombreContainingIgnoreCase(
+                criterio,
+                criterio);
     }
 
     @Transactional

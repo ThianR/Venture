@@ -3,22 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.inventiva</groupId>
     <artifactId>venture</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Venture</name>
     <description>Venture - Plataforma empresarial con Spring Boot y Vaadin</description>
     <packaging>jar</packaging>
-
     <properties>
         <java.version>21</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
-        <spring.boot.version>3.3.4</spring.boot.version>
+        <spring.boot.version>3.5.7</spring.boot.version>
         <vaadin.version>24.4.12</vaadin.version>
         <maven.wagon.http.userAgent>Apache-Maven/3.9.6</maven.wagon.http.userAgent>
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -37,7 +34,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -55,6 +51,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <!-- redis aun sin configurar
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
@@ -62,7 +59,7 @@
         <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
@@ -119,8 +116,18 @@
             <artifactId>vaadin-testbench</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Solo para desarrollo, comentar en produccion y utilizar variables de entorno para no dejar en harcoding nuestra conexion -->
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>dotenv-java</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+        <!-- Para base de datos anteriores al 12c y a partir de hibernate 6.6 -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-community-dialects</artifactId>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -130,7 +137,6 @@
             </plugin>
         </plugins>
     </build>
-
     <repositories>
         <repository>
             <id>central</id>
@@ -153,7 +159,6 @@
             </snapshots>
         </repository>
     </repositories>
-
     <pluginRepositories>
         <pluginRepository>
             <id>central</id>
@@ -164,7 +169,6 @@
             <url>https://maven-central.storage-download.googleapis.com/maven2/</url>
         </pluginRepository>
     </pluginRepositories>
-
     <profiles>
         <profile>
             <id>production</id>

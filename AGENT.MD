@@ -2,7 +2,7 @@
 
 ## Reglas de arquitectura
 - Mantener la arquitectura limpia por capas (domain, application, infrastructure, presentation) dentro de cada módulo.
-- Reutilizar servicios y repositorios compartidos en el módulo `bs` antes de duplicar lógica.
+- Reutilizar servicios y repositorios compartidos en el módulo antes de duplicar lógica.
 - Colocar configuraciones transversales fuera de los módulos en paquetes dedicados bajo `com.inventiva.venture`.
 
 ## Convenciones de nombres
@@ -15,13 +15,13 @@
 3. Añadir un `README.md` describiendo el objetivo y dependencias.
 4. Incluir pruebas unitarias e integración relevantes en `src/test/java` replicando la estructura del módulo.
 
-## Flags `CHAR(1)` a booleanos
-- Mapear campos `CHAR(1)` en entidades JPA como `String` y añadir un campo auxiliar `boolean` anotado con `@Transient`.
+## Flags `Aux` a booleanos
+- Mapear campos `Estados o Indicadores` en entidades JPA como `String` y añadir un campo auxiliar `boolean` anotado con `@Transient`.
 - Utilizar callbacks `@PostLoad`, `@PrePersist` y `@PreUpdate` para sincronizar valores entre el campo de base de datos y el booleano.
 - Interpretar `'S'` o `'A'` como `true` y `'N'` o `'I'` como `false`.
 
 ## Checklist de PR
-- [ ] Código compilado y pruebas ejecutadas.
+- [ ] Código compilado y pruebas ejecutadas(si es posible).
 - [ ] Cobertura relevante para servicios y repositorios.
 - [ ] Validaciones y Binder de Vaadin revisados.
 - [ ] Documentación actualizada (README, notas de módulo, etc.).

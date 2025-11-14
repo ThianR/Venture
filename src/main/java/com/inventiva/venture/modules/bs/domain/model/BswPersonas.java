@@ -37,7 +37,7 @@ public class BswPersonas {
             allocationSize = 1
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BSW_PERSONAS_SEQ")
-    @Column(name = "ID_PERSONA")
+    @Column(name = "ID")
     private Long id;
 
     @Column(name = "COD_PERSONA", nullable = false, length = 30)
@@ -64,47 +64,16 @@ public class BswPersonas {
     @Transient
     private boolean esFisicaAux;
 
-    @Column(name = "ES_CLIENTE", length = 1)
-    private String esCliente;
-
-    @Transient
-    private boolean esClienteAux;
-
-    @Column(name = "ES_PROVEEDOR", length = 1)
-    private String esProveedor;
-
-    @Transient
-    private boolean esProveedorAux;
-
-    @Column(name = "ES_EMPLEADO", length = 1)
-    private String esEmpleado;
-
-    @Transient
-    private boolean esEmpleadoAux;
-
-    @Column(name = "ESTADO", length = 1)
-    private String estado;
-
-    @Transient
-    private boolean estadoActivoAux;
 
     @PostLoad
     public void onPostLoad() {
         esFisicaAux = toBoolean(esFisica);
-        esClienteAux = toBoolean(esCliente);
-        esProveedorAux = toBoolean(esProveedor);
-        esEmpleadoAux = toBoolean(esEmpleado);
-        estadoActivoAux = toBoolean(estado);
     }
 
     @PrePersist
     @PreUpdate
     public void beforeSave() {
         esFisica = fromBoolean(esFisicaAux, esFisica);
-        esCliente = fromBoolean(esClienteAux, esCliente);
-        esProveedor = fromBoolean(esProveedorAux, esProveedor);
-        esEmpleado = fromBoolean(esEmpleadoAux, esEmpleado);
-        estado = fromBoolean(estadoActivoAux, estado);
     }
 
     private boolean toBoolean(String value) {

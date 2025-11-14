@@ -1,6 +1,6 @@
 /target/
-/.idea/
 /.vscode/
 /node_modules/
 /frontend/generated/
+.env
 .DS_Store

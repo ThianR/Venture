@@ -88,41 +88,44 @@ public class BswPersonasView extends VerticalLayout {
         grid.addColumn(BswPersonas::getDireccion).setHeader("Dirección").setAutoWidth(true);
         grid.addColumn(BswPersonas::getTelefono).setHeader("Teléfono").setAutoWidth(true);
         grid.addColumn(persona -> persona.getFecNacimiento() != null ? persona.getFecNacimiento().toString() : "")
-                .setHeader("Fecha de nacimiento");
-        grid.addColumn(persona -> persona.isEstadoActivoAux() ? "Activo" : "Inactivo")
-                .setHeader("Estado");
+                .setHeader("Fecha de nacimiento");       
         grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         grid.setSizeFull();
 
         CallbackDataProvider<BswPersonas, Void> dataProvider = new CallbackDataProvider<>(
                 query -> fetch(query, currentFilter),
-                query -> count(currentFilter)
-        );
+                query -> count(currentFilter));
         grid.setDataProvider(dataProvider);
 
         grid.asSingleSelect().addValueChangeListener(event -> editPersona(event.getValue()));
     }
 
     private Stream<BswPersonas> fetch(Query<BswPersonas, Void> query, String filter) {
+        String criterio = filter == null ? "" : filter.trim();
         Pageable pageable = createPageable(query);
-        Page<BswPersonas> page = service.listar(filter, pageable);
+        Page<BswPersonas> page = service.listar(criterio, pageable);
         return page.stream();
     }
 
     private int count(String filter) {
-        Page<BswPersonas> page = service.listar(filter, PageRequest.of(0, 1));
-        return (int) page.getTotalElements();
+        String criterio = filter == null ? "" : filter.trim();
+        return (int) service.contar(criterio);
     }
 
     private Pageable createPageable(Query<BswPersonas, Void> query) {
         int page = query.getOffset() / query.getLimit();
+
         List<Sort.Order> orders = query.getSortOrders().stream()
                 .map(order -> new Sort.Order(
                         order.getDirection() == SortDirection.ASCENDING ? Sort.Direction.ASC : Sort.Direction.DESC,
-                        order.getSorted()
-                ))
+                        order.getSorted()))
                 .toList();
-        Sort sort = orders.isEmpty() ? Sort.by("codPersona") : Sort.by(orders);
+
+        // Si el usuario no ordenó desde la UI, usamos id DESC por defecto
+        Sort sort = orders.isEmpty()
+                ? Sort.by(Sort.Direction.DESC, "id") // nombre del campo en la entidad (tienes getId()n)
+                : Sort.by(orders);
+
         return PageRequest.of(page, query.getLimit(), sort);
     }
 
