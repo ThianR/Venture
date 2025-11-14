@@ -15,7 +15,6 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.Query;
@@ -131,31 +130,27 @@ public class BswPersonasView extends VerticalLayout {
 
     private void configureForm() {
         form.setWidth("25em");
-        form.addListener(SaveEvent.class, this::savePersona);
-        form.addListener(DeleteEvent.class, this::deletePersona);
-        form.addListener(CloseEvent.class, event -> closeEditor());
-    }
-
-    private void savePersona(SaveEvent event) {
-        BswPersonas persona = event.getPersona();
-        if (persona == null) {
-            Notification.show("Datos incompletos", 3000, Notification.Position.MIDDLE);
-            return;
-        }
-        service.guardar(persona);
-        Notification.show("Persona guardada", 3000, Notification.Position.BOTTOM_START);
-        refreshGrid();
-        closeEditor();
-    }
-
-    private void deletePersona(DeleteEvent event) {
-        BswPersonas persona = event.getPersona();
-        if (persona != null && persona.getId() != null) {
-            service.eliminar(persona.getId());
-            Notification.show("Persona eliminada", 3000, Notification.Position.BOTTOM_START);
+        form.addListener(SaveEvent.class, event -> {
+            BswPersonas persona = event.getPersona();
+            if (persona == null) {
+                Notification.show("Datos incompletos", 3000, Notification.Position.MIDDLE);
+                return;
+            }
+            service.guardar(persona);
+            Notification.show("Persona guardada", 3000, Notification.Position.BOTTOM_START);
             refreshGrid();
             closeEditor();
-        }
+        });
+        form.addListener(DeleteEvent.class, event -> {
+            BswPersonas persona = event.getPersona();
+            if (persona != null && persona.getId() != null) {
+                service.eliminar(persona.getId());
+                Notification.show("Persona eliminada", 3000, Notification.Position.BOTTOM_START);
+                refreshGrid();
+                closeEditor();
+            }
+        });
+        form.addListener(CloseEvent.class, event -> closeEditor());
     }
 
     private void editPersona(BswPersonas persona) {

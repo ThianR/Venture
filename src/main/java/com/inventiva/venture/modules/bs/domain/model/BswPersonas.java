@@ -77,10 +77,7 @@ public class BswPersonas {
     }
 
     private boolean toBoolean(String value) {
-        if (value == null) {
-            return false;
-        }
-        return TRUE_VALUES.contains(value.toUpperCase());
+        return value != null && TRUE_VALUES.contains(value.toUpperCase());
     }
 
     private String fromBoolean(boolean flag, String currentValue) {
