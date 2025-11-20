@@ -11,6 +11,9 @@ import java.util.*;
 public class MapSpecificationBuilder<T> {
 
     public Specification<T> build(Map<String, Object> filters) {
+        if (filters == null || filters.isEmpty()) {
+            return (root, query, cb) -> cb.conjunction();
+        }
         return construir(filters);
     }
 
@@ -19,6 +22,9 @@ public class MapSpecificationBuilder<T> {
      * filtros.
      */
     public Specification<T> construir(Map<String, Object> filtros) {
+        if (filtros == null || filtros.isEmpty()) {
+            return (root, query, cb) -> cb.conjunction();
+        }
         return (root, query, cb) -> {
             List<Predicate> predicados = new ArrayList<>();
 
@@ -65,7 +71,11 @@ public class MapSpecificationBuilder<T> {
         return switch (operador) {
             case "eq" -> { // igualdad
                 Path<Object> ruta = resolverRuta(root, propiedad);
-                yield cb.equal(ruta, valor);
+                yield cb.equal(ruta, convertirValor(valor, ruta.getJavaType()));
+            }
+            case "ne" -> { // distinto
+                Path<Object> ruta = resolverRuta(root, propiedad);
+                yield cb.notEqual(ruta, convertirValor(valor, ruta.getJavaType()));
             }
             case "like" -> { // like normal
                 Path<String> ruta = resolverRuta(root, propiedad);
@@ -74,6 +84,14 @@ public class MapSpecificationBuilder<T> {
             case "likeic" -> { // like ignore case
                 Path<String> ruta = resolverRuta(root, propiedad);
                 yield cb.like(cb.upper(ruta), "%" + valor.toString().toUpperCase() + "%");
+            }
+            case "isnull" -> { // es nulo
+                Path<Object> ruta = resolverRuta(root, propiedad);
+                yield cb.isNull(ruta);
+            }
+            case "notnull" -> { // no es nulo
+                Path<Object> ruta = resolverRuta(root, propiedad);
+                yield cb.isNotNull(ruta);
             }
             case "ge" -> { // >=
                 Path<?> ruta = resolverRuta(root, propiedad);
@@ -98,8 +116,9 @@ public class MapSpecificationBuilder<T> {
             case "in" -> { // IN lista
                 Path<Object> ruta = resolverRuta(root, propiedad);
                 CriteriaBuilder.In<Object> in = cb.in(ruta);
-                for (Object v : (Collection<?>) valor) {
-                    in.value(v);
+                Class<?> tipoDestino = ruta.getJavaType();
+                for (Object v : normalizarColeccion(valor)) {
+                    in.value(convertirValor(v, tipoDestino));
                 }
                 yield in;
             }
@@ -139,7 +158,20 @@ public class MapSpecificationBuilder<T> {
         }
         return resultado;
     }
-
+    private Collection<?> normalizarColeccion(Object valor) {
+        if (valor instanceof Collection<?> coleccion) {
+            return coleccion;
+        }
+        if (valor != null && valor.getClass().isArray()) {
+            int length = java.lang.reflect.Array.getLength(valor);
+            List<Object> resultado = new ArrayList<>(length);
+            for (int i = 0; i < length; i++) {
+                resultado.add(java.lang.reflect.Array.get(valor, i));
+            }
+            return resultado;
+        }
+        return Collections.singletonList(valor);
+    }
     /**
      * Soporta paths anidados: "bswPaises.descripcion", "bswPaises.region.nombre",
      * etc.
@@ -279,7 +311,7 @@ public class MapSpecificationBuilder<T> {
                 return LocalDateTime.parse(s);
             } else if (tipoDestino.equals(Boolean.class) || tipoDestino.equals(boolean.class)) {
                 return Boolean.valueOf(s);
-            }            
+            }
         }
         // Último recurso: si no sabemos convertir, devolvemos el valor original
         // y dejaremos que falle más adelante si no es compatible.
