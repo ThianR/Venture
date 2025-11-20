@@ -28,7 +28,7 @@ La aplicación inicia en `http://localhost:8080` y la UI de personas está dispo
   - `domain`: entidades y reglas de negocio.
   - `application`: servicios orquestadores.
   - `infrastructure`: repositorios, integraciones.
-  - `presentation`: vistas Vaadin y componentes UI.
+  - `presentation`: vistas Vaadin (components - Formulario) (views-Lista Principal) y componentes UI.
 - `com.inventiva.venture.ui`: layouts compartidos.
 - Migraciones Flyway en `src/main/resources/db/migration`.
 
