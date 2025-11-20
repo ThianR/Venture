@@ -28,10 +28,6 @@ public class FormBswPersonas extends FormLayout {
     private final TextField telefono = new TextField("Teléfono");
     private final DatePicker fecNacimiento = new DatePicker("Fecha de nacimiento");
     private final Checkbox esFisicaAux = new Checkbox("Persona física");
-    private final Checkbox esClienteAux = new Checkbox("Cliente");
-    private final Checkbox esProveedorAux = new Checkbox("Proveedor");
-    private final Checkbox esEmpleadoAux = new Checkbox("Empleado");
-    private final Checkbox estadoActivoAux = new Checkbox("Activo");
 
     private final Button save = new Button("Guardar");
     private final Button delete = new Button("Eliminar");
@@ -45,7 +41,7 @@ public class FormBswPersonas extends FormLayout {
         configureFields();
         configureBinder();
         add(codPersona, nombre, ruc, direccion, telefono, fecNacimiento,
-                esFisicaAux, esClienteAux, esProveedorAux, esEmpleadoAux, estadoActivoAux,
+                esFisicaAux,
                 createButtonsLayout());
     }
 
@@ -57,10 +53,6 @@ public class FormBswPersonas extends FormLayout {
         telefono.setId("telefono");
         fecNacimiento.setId("fecNacimiento");
         esFisicaAux.setId("esFisicaAux");
-        esClienteAux.setId("esClienteAux");
-        esProveedorAux.setId("esProveedorAux");
-        esEmpleadoAux.setId("esEmpleadoAux");
-        estadoActivoAux.setId("estadoActivoAux");
 
         codPersona.setRequiredIndicatorVisible(true);
         nombre.setRequiredIndicatorVisible(true);
@@ -163,10 +155,6 @@ public class FormBswPersonas extends FormLayout {
 
     public DatePicker getFecNacimientoField() {
         return fecNacimiento;
-    }
-
-    public Checkbox getEstadoActivoCheckbox() {
-        return estadoActivoAux;
     }
 
     public void submit() {

@@ -3,7 +3,6 @@ package com.inventiva.venture.modules.bs.presentation.components;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.inventiva.venture.modules.bs.domain.model.BswPersonas;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.textfield.TextField;
 import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,11 +36,9 @@ class FormBswPersonasTest {
 
         TextField codField = form.getCodPersonaField();
         TextField nombreField = form.getNombreField();
-        Checkbox estado = form.getEstadoActivoCheckbox();
 
         codField.setValue("001");
         nombreField.setValue("Juan Perez");
-        estado.setValue(true);
 
         form.submit();
 
